@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIS Documentation | Jizryl Arboleda</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> <style>
+        /* --- FLOATING ANIMATION --- */
+        @keyframes floatCard {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .photo-card {
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid #444;
+            transition: all 0.4s ease;
+            height: 250px;
+            background: #111; /* Dark background default para sa technical shots */
+            animation: floatCard 4s ease-in-out infinite;
+        }
+
+        /* Support para sa Light Mode cards */
+        body.light-mode .photo-card {
+            background: #f8f9fa;
+            border-color: #ddd;
+        }
+
+        .col-md-4:nth-child(1) .photo-card { animation-delay: 0s; }
+        .col-md-4:nth-child(2) .photo-card { animation-delay: 1s; }
+        .col-md-4:nth-child(3) .photo-card { animation-delay: 0.5s; }
+
+        .photo-card:hover {
+            border-color: #ffc107;
+            animation-play-state: paused;
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(255, 193, 7, 0.2);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; 
+            padding: 10px;
+            background: #1a1a1a;
+            transition: 0.3s;
+        }
+
+        /* Light mode adjustment para sa image background */
+        body.light-mode .photo-card img {
+            background: #ffffff;
+        }
+
+        /* Modal remains dark for better contrast with technical diagrams */
+        .modal-content {
+            background-color: rgba(0, 0, 0, 0.95);
+            border: 1px solid #ffc107;
+        }
+        .carousel-img {
+            max-height: 80vh;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body> <nav class="navbar navbar-expand-lg custom-navbar sticky-top">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="gallery.html" class="text-decoration-none text-secondary fw-bold btn-back">← Back to Albums</a>
+            
+            <div class="ms-auto me-3">
+                <button class="btn btn-dark btn-sm" onclick="toggleTheme()" id="theme-btn">
+                    🌙 Dark Mode
+                </button>
+            </div>
+            
+            <span class="text-warning fw-bold small text-uppercase tracking-wider d-none d-sm-inline">Technical Archives</span>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <h2 class="text-warning mb-2 text-center fw-bold">MIS Documentation</h2>
+        <p class="text-secondary text-center mb-5 small">Systems Planning, Data Architecture, and Operational Workflows</p>
+        
+        <div class="row g-4">
+            <div class="col-md-4 col-6 feature">
+                <div class="photo-card" data-bs-toggle="modal" data-bs-target="#misModal" data-bs-slide-to="0">
+                    <img src="pmspowerbi.png" alt="PMS Tracker To Power BI">
+                </div>
+            </div>
+            <div class="col-md-4 col-6 feature">
+                <div class="photo-card" data-bs-toggle="modal" data-bs-target="#misModal" data-bs-slide-to="1">
+                    <img src="messyclean.png" alt="RAW DATA (MESSY EXCEL SAMPLE)  and CLEANED DATA (AFTER)">
+                </div>
+            </div>
+            <div class="col-md-4 col-6 feature">
+                <div class="photo-card" data-bs-toggle="modal" data-bs-target="#misModal" data-bs-slide-to="2">
+                    <img src="dashboard1.jpg" alt="Data Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="misModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+            <div class="modal-content">
+                <div class="text-end p-3">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div id="misCarousel" class="carousel slide" data-bs-ride="false">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="pmspowerbi.png" class="d-block w-100 carousel-img">
+                                <div class="text-center py-3 text-warning">PMS Tracker To Power BI</div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="messyclean.png" class="d-block w-100 carousel-img">
+                                <div class="text-center py-3 text-warning">Sales Data Cleaning Project (Excel / Data Analytics Sample)</div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="dashboard1.jpg" class="d-block w-100 carousel-img">
+                                <div class="text-center py-3 text-warning">Management Information System Dashboard</div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#misCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#misCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script> <script>
+        // Modal and Carousel Trigger logic
+        const myModal = document.getElementById('misModal');
+        const carouselEl = document.getElementById('misCarousel');
+        const carousel = new bootstrap.Carousel(carouselEl);
+
+        myModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const slideIndex = button.getAttribute('data-bs-slide-to');
+            carousel.to(slideIndex);
+        });
+    </script>
+</body>
+</html>

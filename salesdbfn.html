@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sales Dashboard Netsuite</title>
+  <link rel="stylesheet" href="sdbfn.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <header class="header">
+    <div class="header__brand">
+      <span class="header__dot"></span>
+      <h1 class="header__title">Sales Dashboard From Netsuite</h1>
+    </div>
+
+    <div class="header__filters">
+      <div class="filter-group">
+        <label>From:</label>
+        <input type="date" id="startDate" class="input-date" />
+      </div>
+      <div class="filter-group">
+        <label>To:</label>
+        <input type="date" id="endDate" class="input-date" />
+      </div>
+      <button id="filterBtn" class="btn-filter">Filter</button>
+      <button id="resetBtn" class="btn-reset">Reset</button>
+    </div>
+
+    <div class="header__actions">
+      <input type="file" id="csvFileInput" accept=".csv" hidden />
+      <button class="btn-upload" id="uploadBtn">Upload CSV</button>
+      <div class="header__export-tools">
+        <button id="exportCsvBtn" class="btn-secondary">Export CSV</button>
+        <button id="exportPdfBtn" class="btn-secondary">Export PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="section">
+      <h2 class="section__label">Overview</h2>
+      <div class="cards-grid">
+        <div class="card">
+          <p class="card__metric-label">Total Units Sold</p>
+          <p class="card__value" id="totalSalesValue">—</p>
+          <p class="card__sub" id="salesGrowth">Waiting for data...</p>
+        </div>
+
+        <div class="card">
+          <p class="card__metric-label">% Achievement</p>
+          <p class="card__value" id="achievementValue">—</p>
+          <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <p class="card__sub">Goal: 1,000,000 Units</p>
+        </div>
+
+        <div class="card">
+          <p class="card__metric-label">Top 10 Best Selling SKU</p>
+          <div id="topSkuList" class="top-list">
+            <p class="card__sub">No data loaded.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="card__metric-label">Top 10 Accounts</p>
+          <div id="topPerformerList" class="top-list">
+            <p class="card__sub">No data loaded.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section__label">Auto Insights</h2>
+      <div class="card insights-panel">
+        <div class="insights-grid" id="insightsContainer">
+          <p class="card__sub">Upload CSV to see performance highlights.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="charts-grid">
+        <div class="chart-card">
+          <p class="chart-card__title">Monthly Sales Trend</p>
+          <div class="chart-card__body"><canvas id="chartSalesOverTime"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <p class="chart-card__title">Top Accounts Contribution</p>
+          <div class="chart-card__body"><canvas id="chartSalesBySalesman"></canvas></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="status-bar"><span id="statusMessage">Ready.</span></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="salesdbn.js"></script>
+</body>
+</html>

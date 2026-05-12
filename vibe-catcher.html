@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vibe Catcher | Jijiz Game Hub</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #1a1a1a; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        canvas { display: block; background: radial-gradient(circle, #2c3e50, #000000); }
+        .ui {
+            position: absolute; top: 20px; left: 20px;
+            font-size: 24px; font-weight: bold; color: #0dcaf0;
+            pointer-events: none; text-shadow: 0 0 10px rgba(13, 202, 240, 0.5);
+        }
+        .back-btn {
+            position: absolute; top: 20px; right: 20px;
+            padding: 10px 20px; background: #0dcaf0; color: #000;
+            border: none; border-radius: 20px; cursor: pointer; 
+            text-decoration: none; font-weight: bold; z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ui">Score: <span id="score">0</span></div>
+    <a href="gamehub.html" class="back-btn">Exit Hub</a>
+    <canvas id="gameCanvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreElement = document.getElementById('score');
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Game Variables
+    let score = 0;
+    let gameActive = true;
+    
+    // Load Player Sticker (Thumbs Up)
+    const playerImg = new Image();
+    playerImg.src = 'thumbsup.png';
+
+    const player = {
+        x: canvas.width / 2,
+        y: canvas.height - 120,
+        width: 80,
+        height: 80,
+        speed: 8
+    };
+
+    // Vibe Items (Objects to catch)
+    const items = [];
+    let spawnTimer = 0;
+
+    function spawnItem() {
+        items.push({
+            x: Math.random() * (canvas.width - 40),
+            y: -50,
+            width: 40,
+            height: 40,
+            speed: 3 + (score / 50),
+            color: '#f1c40f' // Gold vibes
+        });
+    }
+
+    // Controls Logic
+    let moveLeft = false;
+    let moveRight = false;
+
+    window.addEventListener('keydown', (e) => {
+        if (e.code === 'ArrowLeft') moveLeft = true;
+        if (e.code === 'ArrowRight') moveRight = true;
+    });
+
+    window.addEventListener('keyup', (e) => {
+        if (e.code === 'ArrowLeft') moveLeft = false;
+        if (e.code === 'ArrowRight') moveRight = false;
+    });
+
+    // Touch/Mouse Follow Logic
+    canvas.addEventListener('mousemove', (e) => {
+        player.x = e.clientX - player.width / 2;
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+        player.x = e.touches[0].clientX - player.width / 2;
+        e.preventDefault();
+    }, {passive: false});
+
+    function update() {
+        if (!gameActive) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Move Player via Keyboard
+        if (moveLeft && player.x > 0) player.x -= player.speed;
+        if (moveRight && player.x < canvas.width - player.width) player.x += player.speed;
+
+        // Draw Player
+        ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+
+        // Items Logic
+        spawnTimer++;
+        if (spawnTimer > 40) {
+            spawnItem();
+            spawnTimer = 0;
+        }
+
+        items.forEach((item, index) => {
+            item.y += item.speed;
+            
+            // Draw Falling Vibe
+            ctx.fillStyle = item.color;
+            ctx.beginPath();
+            ctx.arc(item.x + 20, item.y + 20, 15, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Collision Detection (Catching logic)
+            if (
+                player.x < item.x + item.width &&
+                player.x + player.width > item.x &&
+                player.y < item.y + item.height &&
+                player.y + player.height > item.y
+            ) {
+                items.splice(index, 1);
+                score += 10;
+                scoreElement.innerText = score;
+            }
+
+            // Missed Item (Game Over)
+            if (item.y > canvas.height) {
+                gameOver();
+            }
+        });
+
+        requestAnimationFrame(update);
+    }
+
+    function gameOver() {
+        gameActive = false;
+        ctx.fillStyle = 'rgba(0,0,0,0.8)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#0dcaf0';
+        ctx.textAlign = 'center';
+        ctx.font = 'bold 40px Segoe UI';
+        ctx.fillText('VIBE LOST!', canvas.width / 2, canvas.height / 2);
+        ctx.font = '20px Segoe UI';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Final Score: ' + score, canvas.width / 2, canvas.height / 2 + 40);
+        ctx.fillText('Tap or Refresh to Try Again', canvas.width / 2, canvas.height / 2 + 80);
+    }
+
+    canvas.addEventListener('click', () => {
+        if (!gameActive) location.reload();
+    });
+
+    playerImg.onload = update;
+</script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Growth | Jizryl Arboleda</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> <style>
+        /* --- FLOATING ANIMATION --- */
+        @keyframes floatCard {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .photo-card {
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid #444;
+            transition: all 0.4s ease;
+            height: 250px;
+            animation: floatCard 4s ease-in-out infinite;
+            background: #1a1a1a; /* Default dark background */
+        }
+
+        /* Support para sa Light Mode cards */
+        body.light-mode .photo-card {
+            background: #ffffff;
+            border-color: #ddd;
+        }
+
+        .col-md-4:nth-child(odd) .photo-card { animation-delay: 0.7s; }
+        .col-md-4:nth-child(even) .photo-card { animation-delay: 1.2s; }
+
+        .photo-card:hover {
+            border-color: #ffc107;
+            animation-play-state: paused;
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(255, 193, 7, 0.2);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Modal styling para sa photos */
+        .modal-content {
+            background-color: rgba(0, 0, 0, 0.95);
+            border: 1px solid #ffc107;
+        }
+        .carousel-img {
+            max-height: 80vh;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body> <nav class="navbar navbar-expand-lg custom-navbar sticky-top">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="gallery.html" class="text-decoration-none text-secondary fw-bold">← Back to Albums</a>
+            
+            <div class="ms-auto me-3">
+                <button class="btn btn-dark btn-sm" onclick="toggleTheme()" id="theme-btn">
+                    🌙 Dark Mode
+                </button>
+            </div>
+            
+            <span class="text-warning fw-bold small text-uppercase d-none d-sm-inline">Growth & Achievements</span>
+        </div>
+    </nav>
+
+   <main class="container my-5">
+    <h2 class="text-warning mb-2 text-center">Professional Growth</h2>
+    <p class="text-secondary text-center mb-5 small">Certificates, Meetings, and Team Activities</p>
+    
+    <div class="row g-4">
+        <!-- Row 1 -->
+        <div class="col-md-4 col-6 feature">
+            <div class="photo-card" data-bs-toggle="modal" data-bs-target="#growthModal" data-bs-slide-to="0">
+                <img src="cert1.jpg" alt="DICT Certificate">
+            </div>
+        </div>
+        <div class="col-md-4 col-6 feature">
+            <div class="photo-card" data-bs-toggle="modal" data-bs-target="#growthModal" data-bs-slide-to="1">
+                <img src="growth-cover.jpeg" alt="Teams Seminar">
+            </div>
+        </div>
+        <div class="col-md-4 col-6 feature">
+            <div class="photo-card" data-bs-toggle="modal" data-bs-target="#growthModal" data-bs-slide-to="2">
+                <img src="seminar2.jpeg" alt="Team Activity">
+            </div>
+        </div>
+        <!-- Row 2 (Inayos ang slide-to numbers para magtuloy-tuloy) -->
+        <div class="col-md-4 col-6 feature">
+            <div class="photo-card" data-bs-toggle="modal" data-bs-target="#growthModal" data-bs-slide-to="3">
+                <img src="cert3.png" alt="DICT Certificate">
+            </div>
+        </div>
+        <div class="col-md-4 col-6 feature">
+            <div class="photo-card" data-bs-toggle="modal" data-bs-target="#growthModal" data-bs-slide-to="4">
+                <img src="cert4.png" alt="DICT Certificate">
+            </div>
+        </div>
+        <div class="col-md-4 col-6 feature">
+            <div class="photo-card" data-bs-toggle="modal" data-bs-target="#growthModal" data-bs-slide-to="5">
+                <img src="cert5.jpg" alt="Certificate">
+            </div>
+        </div>
+    </div>
+</main>
+
+    <div class="modal fade" id="growthModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="text-end p-3">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <div class="modal-body p-0">
+                <div id="growthCarousel" class="carousel slide" data-bs-ride="false">
+                    <div class="carousel-inner">
+                        <!-- Item 0 -->
+                        <div class="carousel-item active">
+                            <img src="cert1.jpg" class="d-block w-100 carousel-img">
+                            <div class="text-center py-3 text-warning">Verified Professional Certificate</div>
+                        </div>
+                        <!-- Item 1 -->
+                        <div class="carousel-item">
+                            <img src="growth-cover.jpeg" class="d-block w-100 carousel-img">
+                            <div class="text-center py-3 text-warning">MK Capability Training</div>
+                        </div>
+                        <!-- Item 2 -->
+                        <div class="carousel-item">
+                            <img src="seminar2.jpeg" class="d-block w-100 carousel-img">
+                            <div class="text-center py-3 text-warning">SPARK Technical Training on Contact Services NC II</div>
+                        </div>
+                        <!-- Item 3 -->
+                        <div class="carousel-item">
+                            <img src="cert3.png" class="d-block w-100 carousel-img">
+                            <div class="text-center py-3 text-warning">Learn Chatgpt for Government Workforce</div>
+                        </div>
+                        <!-- Item 4 -->
+                        <div class="carousel-item">
+                            <img src="cert4.png" class="d-block w-100 carousel-img">
+                            <div class="text-center py-3 text-warning">Graphic Design for Canva Beginners with Ai Powered Canva</div>
+                        </div>
+                        <!-- Item 5 -->
+                        <div class="carousel-item">
+                            <img src="cert5.jpg" class="d-block w-100 carousel-img">
+                            <div class="text-center py-3 text-warning">Data Analytics</div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+                        <button class="carousel-control-prev" type="button" data-bs-target="#growthCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#growthCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script> <script>
+        const myModal = document.getElementById('growthModal');
+        const carouselEl = document.getElementById('growthCarousel');
+        const carousel = new bootstrap.Carousel(carouselEl);
+
+        myModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const slideIndex = button.getAttribute('data-bs-slide-to');
+            carousel.to(slideIndex);
+        });
+    </script>
+</body>
+</html>

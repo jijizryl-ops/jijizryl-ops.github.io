@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Awesome Runner</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #87CEEB; font-family: sans-serif; }
+        canvas { display: block; background: linear-gradient(#87CEEB, #E0F6FF); }
+        .ui {
+            position: absolute; top: 20px; left: 20px;
+            font-size: 24px; font-weight: bold; color: #333;
+            pointer-events: none;
+        }
+        .back-btn {
+            position: absolute; top: 20px; right: 20px;
+            padding: 10px 20px; background: #333; color: white;
+            border: none; border-radius: 20px; cursor: pointer; text-decoration: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ui">Score: <span id="score">0</span></div>
+    <a href="gamehub.html" class="back-btn">Exit</a>
+    <canvas id="gameCanvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const scoreElement = document.getElementById('score');
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Game Variables
+    let score = 0;
+    let gameActive = true;
+    const gravity = 0.6;
+    const groundHeight = 100;
+
+    const playerImg = new Image();
+    playerImg.src = 'awesome.png';
+
+    const player = {
+        x: 50,
+        y: 0,
+        width: 80,
+        height: 80,
+        dy: 0,
+        jumpForce: -15,
+        grounded: false
+    };
+
+    const obstacles = [];
+    let spawnTimer = 0;
+
+    function spawnObstacle() {
+        obstacles.push({
+            x: canvas.width,
+            y: canvas.height - groundHeight - 50,
+            width: 40,
+            height: 50,
+            speed: 6 + (score / 100)
+        });
+    }
+
+    function jump() {
+        if (player.grounded && gameActive) {
+            player.dy = player.jumpForce;
+            player.grounded = false;
+        } else if (!gameActive) {
+            location.reload(); 
+        }
+    }
+
+    // --- FIXED CONTROLS FOR LAPTOP/PC ---
+    // 1. Keyboard Support (Space and ArrowUp)
+    window.addEventListener('keydown', (e) => { 
+        if (e.code === 'Space' || e.code === 'ArrowUp') {
+            e.preventDefault(); // Prevents the page from scrolling down
+            jump();
+        }
+    });
+
+    // 2. Mouse Click Support
+    window.addEventListener('mousedown', (e) => {
+        if (e.button === 0) jump(); // Left click to jump
+    });
+
+    // 3. Touch Support (Mobile)
+    window.addEventListener('touchstart', (e) => {
+        // Prevent default only if game is active to allow the "Exit" link to work
+        if (gameActive) e.preventDefault(); 
+        jump();
+    });
+
+    function update() {
+        if (!gameActive) return;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw Ground
+        ctx.fillStyle = '#4CAF50';
+        ctx.fillRect(0, canvas.height - groundHeight, canvas.width, groundHeight);
+
+        // Player Physics
+        player.dy += gravity;
+        player.y += player.dy;
+
+        if (player.y + player.height > canvas.height - groundHeight) {
+            player.y = canvas.height - groundHeight - player.height;
+            player.dy = 0;
+            player.grounded = true;
+        }
+
+        ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
+
+        spawnTimer++;
+        if (spawnTimer > Math.max(60, 120 - score/10)) {
+            spawnObstacle();
+            spawnTimer = 0;
+        }
+
+        obstacles.forEach((obs, index) => {
+            obs.x -= obs.speed;
+            
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+
+            if (
+                player.x < obs.x + obs.width &&
+                player.x + player.width > obs.x &&
+                player.y < obs.y + obs.height &&
+                player.y + player.height > obs.y
+            ) {
+                gameOver();
+            }
+
+            if (obs.x + obs.width < 0) {
+                obstacles.splice(index, 1);
+                score += 10;
+                scoreElement.innerText = score;
+            }
+        });
+
+        requestAnimationFrame(update);
+    }
+
+    function gameOver() {
+        gameActive = false;
+        ctx.fillStyle = 'rgba(0,0,0,0.7)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'white';
+        ctx.textAlign = 'center';
+        ctx.font = '40px Arial';
+        ctx.fillText('GAME OVER!', canvas.width / 2, canvas.height / 2);
+        ctx.font = '20px Arial';
+        ctx.fillText('Click, Press Space/Up, or Tap to Restart', canvas.width / 2, canvas.height / 2 + 50);
+    }
+
+    playerImg.onload = update;
+</script>
+</body>
+</html>
